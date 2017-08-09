@@ -1,26 +1,51 @@
 import React from 'react';
 
 class Pet extends React.Component {
-  constructor() {
-    super();
+
+  getGenderSymbol(){
+    if (this.props.pet.gender === 'male'){
+      return '♂'
+    } else {
+      return '♀'
+    }
   }
 
+  adoptButtonClicked = (event) => {
+    event.preventDefault()
+    this.setState({
+      isAdopted: true
+    })
+    this.props.onAdoptPet(this.props.pet.id)
+  }
+
+
+  displayCorrectButton(){
+    if (this.props.adoptedPets.includes(this.props.pet.id)){
+        return <button className="ui disabled button">Already adopted</button>
+    } else{
+        return <button className="ui primary button" onClick={this.adoptButtonClicked}>Adopt pet</button>
+    }
+    // if (!this.state.isAdopted){
+    //   return <button className="ui primary button" onClick={this.adoptButtonClicked}>Adopt pet</button>
+    // } else {
+    //   return <button className="ui disabled button">Already adopted</button>
+    // }
+  }
   render() {
     return (
       <div className="card">
         <div className="content">
-          <a className="header">Pet name (gender: ♂ or ♀)</a>
+          <a className="header">{this.props.pet.name} {this.getGenderSymbol()}</a>
           <div className="meta">
-            <span className="date">Pet type</span>
+            <span className="date">Pet type: {this.props.pet.type}</span>
           </div>
           <div className="description">
-            <p>Age: </p>
-            <p>Weight: </p>
+            <p>Age: {this.props.pet.age}</p>
+            <p>Weight: {this.props.pet.weight}</p>
           </div>
         </div>
         <div className="extra content">
-          <button className="ui primary button">Adopt pet</button>
-          <button className="ui disabled button">Already adopted</button>
+          {this.displayCorrectButton()}
         </div>
       </div>
     );
